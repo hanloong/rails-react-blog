@@ -13,6 +13,11 @@ class BlogsController < ApplicationController
     end
   end
 
+  def index
+    blogs = Blog.all
+    render json: blogs
+  end
+
   private
 
   def blog_params

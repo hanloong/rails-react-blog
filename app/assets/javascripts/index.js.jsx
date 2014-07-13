@@ -11,11 +11,32 @@ $.ajaxSetup( {
 
 // this.props.message is the flash message returned by rails.
 var HomeView = React.createClass({
+  getInitialState: function() {
+    return {blogs: []};
+  },
+  componentWillMount: function() {
+    this.loadBlogs();
+  },
+  loadBlogs: function() {
+    $.ajax({
+      url: '/blogs',
+      dataType: 'json',
+      type: 'GET',
+      success: function(data) {
+        this.setState({blogs: data});
+      }.bind(this)
+    });
+  },
   render: function() {
+    var x = this.state.blogs.map(function(d) {
+      return <li key={"blogs_" + d.id}><a href={"#/blogs/" + d.id}>{d.name}</a></li>
+    });
     return (
       <div>
       <p>{this.props.message}</p>
       <a href="#/blogs/new">New Blog</a>
+      <h3>All Blogs</h3>
+      <ul>{x}</ul>
       </div>
     );
   }
