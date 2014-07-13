@@ -6,5 +6,7 @@ Rails.application.routes.draw do
   get 'home/index'
 
   root 'home#index'
-  resources :blogs
+  resources :blogs do
+    resources :entries
+  end
 end

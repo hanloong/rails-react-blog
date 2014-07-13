@@ -18,6 +18,11 @@ class BlogsController < ApplicationController
     render json: blogs
   end
 
+  def show
+    blog = Blog.find params[:id]
+    render json: blog
+  end
+
   private
 
   def blog_params

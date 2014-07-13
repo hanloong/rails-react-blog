@@ -81,7 +81,8 @@ var Router = Backbone.Router.extend({
   message: '',
   routes: {
     '': 'index',
-    "blogs/new": 'new_blog'
+    "blogs/new": 'new_blog',
+    "blogs/:blog_id": 'view_blog'
   },
   index: function() {
     var self = this;
@@ -94,6 +95,44 @@ var Router = Backbone.Router.extend({
     React.renderComponent(
       <NewBlogView message={self.message}/>,
       document.getElementById('new-blog')
+    );
+  },
+  view_blog: function(blog_id) {
+    React.renderComponent(
+      <BlogView blog_id={blog_id}/>,
+      document.getElementById('new-blog')
+    )
+  }
+});
+
+var BlogView = React.createClass({
+  getInitialState: function() {
+    return {name: '', entries: []};
+  },
+  componentWillMount: function() {
+    $.ajax({
+      url: '/blogs/' + this.props.blog_id,
+      dataType: 'json',
+      type: 'GET',
+      success: function(data) {
+        this.setState({name: data.name, entries: data.entries});
+      }.bind(this)
+    });
+  },
+  render: function() {
+    var x = this.state.entries.map(function(d) {
+      if(d != null) {
+        return <li key={d.title}>
+          <p>{d.title}</p>
+          <p>{d.content}</p>
+        </li>
+      }
+    });
+    return (
+        <div>
+        <h1>{this.state.name}</h1>
+        <ul>{x}</ul>
+        </div>
     );
   }
 });
