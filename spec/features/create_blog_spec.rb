@@ -5,8 +5,8 @@ feature 'Create blog' do
     visit '/'
     click_link 'New Blog'
 
-    fill_in 'Name', with: 'My Blog'
-    click_link 'Create blog'
+    fill_in 'name', with: 'My Blog'
+    click_button 'Create Blog'
     expect(page).to have_content('Blog successfully created.')
   end
 end
